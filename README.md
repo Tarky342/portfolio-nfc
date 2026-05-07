@@ -1,36 +1,118 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfolio NFC
 
-## Getting Started
+Experimental NFC-driven portfolio site built with Next.js, React Three Fiber,
+Tailwind CSS, and Sanity Studio. The UI is a 3D gallery wall with a splash
+unlock, loading sequence, HUD overlay, and modal project details.
 
-First, run the development server:
+## Features
+
+- 3D gallery wall with scroll/touch navigation (React Three Fiber + Drei).
+- Splash unlock and staged loading flow.
+- HUD, panel label, dots navigation, and project overlay details.
+- Sanity Studio at /studio for managing panels and projects.
+- Fallback content when Sanity is not configured.
+
+## Tech Stack
+
+- Next.js (App Router)
+- React 19
+- React Three Fiber + Drei
+- Tailwind CSS v4
+- Sanity v5 (content + Studio)
+- Motion (Framer Motion-compatible API)
+
+## Project Structure
+
+- app/ - Next.js App Router pages and layout.
+- components/portfolio/ - 3D scene, UI overlays, and gallery logic.
+- sanity/ - Sanity schema, client, and image helpers.
+- app/studio/[[...index]] - Sanity Studio route.
+
+## Running Locally
+
+Install dependencies and start the dev server:
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open <http://localhost:3000>
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Sanity Configuration
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+This project expects the following environment variables:
 
-## Learn More
+```bash
+NEXT_PUBLIC_SANITY_PROJECT_ID=your-project-id
+NEXT_PUBLIC_SANITY_DATASET=production
+NEXT_PUBLIC_SANITY_API_VERSION=2024-05-01
+```
 
-To learn more about Next.js, take a look at the following resources:
+When not set, the app renders fallback panels defined in
+components/portfolio/data.ts.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Content Model
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Two Sanity document types are used:
 
-## Deploy on Vercel
+- projectproject: project details, tags, images, and links.
+- panelpanel: panel ordering, optional external links, and project references.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Scripts
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run dev     # start dev server
+npm run build   # build for production
+npm run start   # run production server
+npm run lint    # lint
+```
+
+## directory
+
+```
+. // PORTFOLIO-NFC
+├─ app/
+│  ├─ globals.css
+│  ├─ layout.tsx
+│  ├─ page.tsx
+│  └─ studio/
+│     ├─ [[...index]]/
+│     │  ├─ layout.tsx
+│     │  └─ page.tsx
+│     └─ [[...tool]]/  # empty
+├─ components/
+│  └─ portfolio/
+│     ├─ canvas-stage.tsx
+│     ├─ data.ts
+│     ├─ dots-nav.tsx
+│     ├─ hud.tsx
+│     ├─ loading.tsx
+│     ├─ overlay.tsx
+│     ├─ panel-label.tsx
+│     ├─ portfolio-shell.tsx
+│     ├─ splash.tsx
+│     └─ types.ts
+├─ sanity/
+│  ├─ env.ts
+│  ├─ lib/
+│  │  ├─ client.ts
+│  │  ├─ image.ts
+│  │  └─ live.ts
+│  ├─ schemaTypes/
+│  │  ├─ index.ts
+│  │  ├─ panelpanel.ts
+│  │  └─ projectproject.ts
+│  ├─ seed/
+│  │  └─ seed.ndjson
+│  └─ structure.ts
+├─ public/  # empty
+├─ 参照サイト/
+│  └─ portfolioDEMO.html
+├─ sanity.cli.ts
+├─ sanity.config.ts
+├─ STODIO_README.md
+├─ next.config.ts
+├─ package.json
+└─ README.md
+```
