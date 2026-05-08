@@ -13,9 +13,14 @@ import { useEffect, useMemo, useRef, useState } from "react";
 type PortfolioShellProps = {
   panels: GalleryPanel[];
   hud: GalleryHud;
+  splashImageUrl: string;
 };
 
-export default function PortfolioShell({ panels, hud }: PortfolioShellProps) {
+export default function PortfolioShell({
+  panels,
+  hud,
+  splashImageUrl,
+}: PortfolioShellProps) {
   const [unlocked, setUnlocked] = useState(false);
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -100,7 +105,11 @@ export default function PortfolioShell({ panels, hud }: PortfolioShellProps) {
         }`}
       />
 
-      <Splash isVisible={!unlocked} onUnlock={handleUnlock} />
+      <Splash
+        isVisible={!unlocked}
+        onUnlock={handleUnlock}
+        imageUrl={splashImageUrl}
+      />
       <Loading isVisible={loading} progress={progress} />
 
       <section className="relative min-h-screen">

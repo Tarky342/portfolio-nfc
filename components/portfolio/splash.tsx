@@ -3,9 +3,12 @@
 type SplashProps = {
   isVisible: boolean;
   onUnlock: () => void;
+  imageUrl?: string;
 };
 
-export default function Splash({ isVisible, onUnlock }: SplashProps) {
+export default function Splash({ isVisible, onUnlock, imageUrl }: SplashProps) {
+  const resolvedImageUrl = imageUrl ?? "/NameCard/cardFront.svg";
+
   return (
     <button
       type="button"
@@ -18,7 +21,14 @@ export default function Splash({ isVisible, onUnlock }: SplashProps) {
       <span className="absolute left-1/2 top-[45%] h-28 w-28 -translate-x-1/2 rounded-full border border-[#d4b87a]/20 animate-ping [animation-delay:1s] sm:h-35 sm:w-35" />
       <span className="absolute left-1/2 top-[45%] h-28 w-28 -translate-x-1/2 rounded-full border border-[#d4b87a]/10 animate-ping [animation-delay:2s] sm:h-35 sm:w-35" />
 
-      <span className="relative z-10 h-40 w-64 animate-[float_4s_ease-in-out_infinite] rounded-sm border border-white/10 bg-linear-to-br from-[#111] to-[#1b1b18] shadow-2xl sm:h-52 sm:w-86" />
+      <span className="relative z-10 h-40 w-64 overflow-hidden animate-[float_4s_ease-in-out_infinite] rounded-sm border border-white/10 bg-linear-to-br from-[#111] to-[#1b1b18] shadow-2xl sm:h-52 sm:w-86">
+        <img
+          src={resolvedImageUrl}
+          alt="Splash card"
+          className="h-full w-full object-cover"
+        />
+        <span className="absolute inset-0 bg-linear-to-br from-white/10 via-transparent to-black/30" />
+      </span>
 
       <span className="absolute bottom-10 font-mono text-[9px] uppercase tracking-[0.25em] text-[#d4b87a]/60 animate-pulse sm:bottom-12 sm:text-[10px]">
         tap to unlock

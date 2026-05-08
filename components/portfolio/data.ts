@@ -1,9 +1,9 @@
 import "server-only";
 
 import type {
-  GalleryHud,
-  GalleryPanel,
-  GalleryPanelCta,
+    GalleryHud,
+    GalleryPanel,
+    GalleryPanelCta,
 } from "@/components/portfolio/types";
 import { client } from "@/sanity/lib/client";
 import { urlFor } from "@/sanity/lib/image";
@@ -14,6 +14,8 @@ export const HUD: GalleryHud = {
   subtitle: "Information Design Lab & Programming Club",
   hint: "Scroll to\nexplore",
 };
+
+const defaultSplashImage = "/NameCard/cardFront.svg";
 
 type SanityLink = { label?: string; url?: string; primary?: boolean };
 
@@ -36,6 +38,10 @@ type SanityPanel = {
   } | null;
 };
 
+type SanitySplashSettings = {
+  image?: unknown;
+};
+
 const panelsQuery = groq`
   *[_type == "panelpanel"] | order(displayOrder asc) {
     _id,
@@ -54,6 +60,12 @@ const panelsQuery = groq`
       heroImage,
       links
     }
+  }
+`;
+
+const splashQuery = groq`
+  *[_type == "splashSettings"][0] {
+    image
   }
 `;
 
@@ -168,5 +180,23 @@ export async function getGalleryPanels(): Promise<GalleryPanel[]> {
     return panels.map(mapPanel);
   } catch {
     return fallbackPanels;
+  }
+}
+
+export async function getSplashImageUrl(): Promise<string> {
+  try {
+    const splash = await client.fetch<SanitySplashSettings | null>(
+      splashQuery,
+      {},
+      {
+        cache: "force-cache",
+      },
+    );
+
+    if (!splash?.image) return defaultSplashImage;
+
+    return urlFor(splash.image).width(800).url();
+  } catch {
+    return defaultSplashImage;
   }
 }
