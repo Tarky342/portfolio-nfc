@@ -1,9 +1,9 @@
 import "server-only";
 
 import type {
-    GalleryHud,
-    GalleryPanel,
-    GalleryPanelCta,
+  GalleryHud,
+  GalleryPanel,
+  GalleryPanelCta,
 } from "@/components/portfolio/types";
 import { client } from "@/sanity/lib/client";
 import { urlFor } from "@/sanity/lib/image";
@@ -12,10 +12,16 @@ import groq from "groq";
 export const HUD: GalleryHud = {
   name: "Okamoto Takaaki",
   subtitle: "Information Design Lab & Programming Club",
-  hint: "Scroll to\nexplore",
+  hint: "公開できるようなプロジェクトもないので今回私のネットワークを公開\nScroll to nexplore",
 };
 
 const defaultSplashImage = "/NameCard/cardFront.svg";
+const networkImages = [
+  "/networkIMG/backup.png",
+  "/networkIMG/network.png",
+  "/networkIMG/Overview.png",
+  "/networkIMG/VPNNetwork.png",
+];
 
 type SanityLink = { label?: string; url?: string; primary?: boolean };
 
@@ -79,8 +85,7 @@ const fallbackPanels: GalleryPanel[] = [
       "A photo series focused on highland light, layered shadows, and quiet gradients.",
     chips: ["photo", "series", "2026"],
     cta: [{ label: "Open", href: "#", primary: true }],
-    image:
-      "https://images.unsplash.com/photo-1549880338-65ddcdfd017b?w=1200&q=85",
+    image: networkImages[0],
   },
   {
     id: "fallback-2",
@@ -94,8 +99,7 @@ const fallbackPanels: GalleryPanel[] = [
       { label: "Open", href: "#", primary: true },
       { label: "Contact", href: "#contact" },
     ],
-    image:
-      "https://images.unsplash.com/photo-1489515217757-5fd1be406fef?w=1200&q=85",
+    image: networkImages[1],
   },
   {
     id: "fallback-3",
@@ -106,8 +110,7 @@ const fallbackPanels: GalleryPanel[] = [
       "A motion system that blends physicality with soft, serif typography for calm focus.",
     chips: ["motion", "interaction", "2025"],
     cta: [{ label: "Open", href: "#", primary: true }],
-    image:
-      "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1200&q=85",
+    image: networkImages[2],
   },
   {
     id: "fallback-4",
@@ -118,8 +121,7 @@ const fallbackPanels: GalleryPanel[] = [
       "Let us collaborate on spatial visuals, product visuals, or editorial motion.",
     chips: ["contact", "info", "2026"],
     cta: [{ label: "Email", href: "mailto:hello@example.com", primary: true }],
-    image:
-      "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&q=85",
+    image: networkImages[3],
   },
 ];
 
@@ -136,7 +138,7 @@ function mapLinks(links?: SanityLink[]): GalleryPanelCta[] {
     }));
 }
 
-function mapPanel(panel: SanityPanel): GalleryPanel {
+function mapPanel(panel: SanityPanel, index: number): GalleryPanel {
   const project = panel.project;
   const title = panel.title ?? project?.title ?? "Untitled";
   const tag = project?.tag ?? project?.title ?? title;
@@ -144,9 +146,12 @@ function mapPanel(panel: SanityPanel): GalleryPanel {
   const description = project?.description ?? project?.summary ?? short;
   const chips = project?.tags ?? [];
   const imageSource = panel.image ?? project?.heroImage;
-  const image = imageSource
-    ? urlFor(imageSource).width(1200).url()
-    : defaultImage;
+  const localImage = networkImages[index % networkImages.length];
+  const image = localImage
+    ? localImage
+    : imageSource
+      ? urlFor(imageSource).width(1200).url()
+      : defaultImage;
 
   let cta: GalleryPanelCta[] = mapLinks(project?.links);
   if (panel.targetType === "external" && panel.externalUrl) {
@@ -177,7 +182,7 @@ export async function getGalleryPanels(): Promise<GalleryPanel[]> {
 
     if (!panels?.length) return fallbackPanels;
 
-    return panels.map(mapPanel);
+    return panels.map((panel, index) => mapPanel(panel, index));
   } catch {
     return fallbackPanels;
   }

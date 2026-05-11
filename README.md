@@ -68,6 +68,16 @@ npm run start   # run production server
 npm run lint    # lint
 ```
 
+## Deploy (Server)
+
+これは 後の私用のscriptです
+`./deploy.sh` はサーバー上の `portfolio-nfc` に配置しています。GitHub から
+`git pull` を行い、`pm2` を自動更新するためのスクリプトです。
+
+```bash
+./deploy.sh
+```
+
 ## directory
 
 ```

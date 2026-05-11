@@ -1,0 +1,8 @@
+{
+  "chat.tools.terminal.autoApprove": {
+    "/^Add-Type -AssemblyName System\\.Drawing\nGet-ChildItem -Path \"D:\\\\gangb\\\\WorkSpace\\\\dev\\\\go\\\\yosida_zemi\\\\portfolio-nfc\\\\public\\\\networkIMG\" -File \\| ForEach-Object \\{\n  \\$img = \\[System\\.Drawing\\.Image\\]::FromFile\\(\\$_\\.FullName\\)\n  \"\\$\\(\\$_\\.Name\\) \\$\\(\\$img\\.Width\\)x\\$\\(\\$img\\.Height\\)\"\n  \\$img\\.Dispose\\(\\)\n\\} \\| Out-String\n$/": {
+      "approve": true,
+      "matchCommandLine": true
+    }
+  }
+}
