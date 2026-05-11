@@ -176,7 +176,7 @@ export async function getGalleryPanels(): Promise<GalleryPanel[]> {
       panelsQuery,
       {},
       {
-        cache: "force-cache",
+        cache: "no-store",
       },
     );
 
@@ -194,7 +194,7 @@ export async function getSplashImageUrl(): Promise<string> {
       splashQuery,
       {},
       {
-        cache: "force-cache",
+        cache: "no-store",
       },
     );
 
